@@ -23,13 +23,17 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('dev'));
+
+// 🔥 FIX: Enable temp files for Cloudinary
 app.use(
   fileUpload({
+    useTempFiles: true,      // required for Cloudinary uploads
+    tempFileDir: '/tmp/',    // store uploaded files temporarily
     createParentPath: true
   })
 );
 
-// Static files
+// Static files (front-end assets still work)
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
