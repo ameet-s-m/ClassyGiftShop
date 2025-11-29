@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classy Gift Shop - Login / Signup</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+<header class="site-header">
+  <a href="https://www.instagram.com/classy_gift_shop?igsh=ZHEyd2Vta3lhbmF5" target="_blank" rel="noopener noreferrer" class="brand-link">
+    <div class="brand">
+      <h1 class="brand-name">Classy Gift Shop</h1>
+      <p class="brand-tag">Timeless gifts · Unforgettable moments</p>
+    </div>
+  </a>
+  <a href="admin-login.html" class="admin-btn-top-right">Admin</a>
+</header>
+
+<main class="auth-container">
+  <section class="glass-card auth-card">
+
+    <!-- SWITCH BUTTONS -->
+    <div class="auth-switch">
+      <button id="loginTab" class="active">Login</button>
+      <button id="signupTab">Signup</button>
+    </div>
+
+    <!-- ================= LOGIN FORM ================= -->
+    <form id="loginForm" class="auth-form">
+        <input type="email" id="loginEmail" placeholder="Enter Email" required>
+        <input type="password" id="loginPassword" placeholder="Enter Password" required>
+        <button type="submit" class="submit-btn">Login</button>
+        <p id="loginError" class="form-error" style="display:none;"></p>
+    </form>
+
+    <!-- ================= SIGNUP FORM ================= -->
+    <form id="signupForm" class="auth-form" style="display:none">
+        <input type="text" id="s_name" placeholder="Full Name" required>
+        <input type="email" id="s_email" placeholder="Email" required>
+        <input type="password" id="s_password" placeholder="Password" required>
+        <input type="tel" id="s_phone" placeholder="Phone" required>
+        <input type="tel" id="s_altPhone" placeholder="Alternate Phone" required>
+        <input type="text" id="s_address" placeholder="Address" required>
+        <button type="submit" class="submit-btn">Create Account</button>
+        <p id="signupError" class="form-error" style="display:none;"></p>
+    </form>
+
+  </section>
+</main>
+
+<!-- Footer with subtle Instagram link and hidden admin link -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <a class="social-link" href="https://www.instagram.com/classy_gift_shop?igsh=ZHEyd2Vta3lhbmF5" target="_blank" rel="noopener noreferrer" aria-label="Classy Gift Shop Instagram">
+      <!-- Inline Instagram SVG -->
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.2" />
+        <path d="M12 7.5a4.5 4.5 0 100 9 4.5 4.5 0 000-9z" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" />
+      </svg>
+    </a>
+
+    <small class="copyright">© <span id="year"></span> Classy Gift Shop</small>
+  </div>
+</footer>
+
+<script>
+  // set year
+  document.getElementById('year').innerText = new Date().getFullYear();
+</script>
+
+<script src="js/auth.js"></script>
+</body>
+</html>

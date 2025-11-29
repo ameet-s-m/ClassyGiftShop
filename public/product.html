@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product - Classy Gift Shop</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<header class="header">
+  <a href="https://www.instagram.com/classy_gift_shop?igsh=ZHEyd2Vta3lhbmF5" target="_blank" rel="noopener noreferrer" class="logo-link">
+    <div class="logo">🎁 Classy Gift Shop</div>
+  </a>
+  <nav class="navbar">
+    <a href="home.html">🏠 Home</a>
+    <a href="cart.html" class="cart-btn-nav">🛒 Cart</a>
+  </nav>
+</header>
+
+<div class="breadcrumb">
+  <a href="home.html">Home</a> / <span id="breadcrumbCategory"></span> / <span id="breadcrumbProduct"></span>
+</div>
+
+<main class="glass-card product-detail">
+  <div class="product-images">
+    <div class="main-image-wrapper">
+      <img id="mainImage" src="" alt="Product" />
+    </div>
+    <div id="thumbs" class="thumbs"></div>
+  </div>
+  <div class="product-info">
+    <div class="product-meta">
+      <span class="product-category" id="prodCategory"></span>
+      <div class="product-rating">
+        <span class="stars">⭐⭐⭐⭐⭐</span>
+        <span class="rating-text">(245 reviews)</span>
+      </div>
+    </div>
+    <h2 id="prodName" class="product-title"></h2>
+    <p class="price" id="prodPrice"></p>
+    <div class="product-description">
+      <h3>Product Details</h3>
+      <p id="prodDesc"></p>
+    </div>
+    <div class="actions">
+      <button id="btnAddToCart" class="btn-primary">🛒 Add to Cart</button>
+      <button id="btnBuyNow" class="btn-outline">💳 Buy Now</button>
+    </div>
+    <div class="product-benefits">
+      <div class="benefit">
+        <span class="benefit-icon">🎁</span>
+        <p>Gift Wrapped</p>
+      </div>
+      <div class="benefit">
+        <span class="benefit-icon">🚚</span>
+        <p>Free Shipping</p>
+      </div>
+      <div class="benefit">
+        <span class="benefit-icon">🔒</span>
+        <p>100% Secure</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- YOU MIGHT LIKE SECTION -->
+<section class="product-showcase">
+  <h2>✨ Similar Products</h2>
+  <div id="relatedProducts" class="product-list"></div>
+</section>
+
+<footer>
+  <p>&copy; 2025 Classy Gift Shop. All rights reserved. | Handmade gifts for your loved ones.</p>
+</footer>
+
+<script src="js/product-page.js"></script>
+<script src="js/cart.js"></script>
+</body>
+</html>

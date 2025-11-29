@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home - Classy Gift Shop</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<header class="header">
+  <a href="https://www.instagram.com/classy_gift_shop?igsh=ZHEyd2Vta3lhbmF5" target="_blank" rel="noopener noreferrer" class="logo-link">
+    <div class="logo">🎁 Classy Gift Shop</div>
+  </a>
+  <nav class="navbar">
+    <span id="userGreeting"></span>
+    <a href="profile.html" id="profileBtn" class="nav-link">👤 Profile</a>
+    <a href="cart.html" id="cartBtn" class="cart-btn-nav">🛒 Cart</a>
+    <button id="userLogoutBtn" class="btn-outline">Logout</button>
+  </nav>
+</header>
+
+<!-- HERO SECTION -->
+<section class="hero-section">
+  <div class="hero-content">
+    <h1>Timeless Gifts for Unforgettable Moments</h1>
+    <p>Handcrafted luxury gift collections curated just for you</p>
+    <button class="cta-btn" onclick="document.getElementById('categoriesSection').scrollIntoView({behavior: 'smooth'})">Explore Collection</button>
+  </div>
+</section>
+
+<!-- CATEGORIES SECTION -->
+<section class="categories" id="categoriesSection">
+  <div class="section-header">
+    <h2>✨ Gift Categories</h2>
+    <p class="section-subtitle">Browse our curated collections</p>
+  </div>
+  <div id="categoriesGrid" class="category-grid"></div>
+  <div id="categoriesLoading" class="loading-spinner" style="display: none;">
+    <div class="spinner"></div>
+    <p>Loading categories...</p>
+  </div>
+  <div id="categoriesEmpty" style="display: none; text-align: center; padding: 3rem; color: #999;">
+    <p style="font-size: 3rem; margin-bottom: 1rem;">📦</p>
+    <p>No categories available yet. Check back soon!</p>
+  </div>
+</section>
+
+<!-- PRODUCTS SECTION -->
+<section class="product-showcase" id="productsSection">
+  <div class="section-header">
+    <h2>💎 Featured Products</h2>
+    <p class="section-subtitle">Handpicked for elegance and quality</p>
+  </div>
+  
+  <!-- FILTER BAR - Flipkart Style -->
+  <div id="filterSection" class="filter-bar" style="display: none;">
+    <div class="filter-left">
+      <button id="filterBtn" class="filter-btn">All Categories</button>
+      <button class="filter-btn clear-btn" onclick="clearFilter()">✕ Clear</button>
+    </div>
+    <div class="filter-right">
+      <select class="sort-dropdown" onchange="sortProducts(this.value)">
+        <option value="">Sort by</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+        <option value="rating">Top Rated</option>
+        <option value="newest">Newest First</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="productsGrid" class="product-list"></div>
+  <div id="productsLoading" class="loading-spinner" style="display: none;">
+    <div class="spinner"></div>
+    <p>Loading products...</p>
+  </div>
+  <div id="productsEmpty" style="display: none; text-align: center; padding: 3rem; color: #999;">
+    <p style="font-size: 3rem; margin-bottom: 1rem;">🎁</p>
+    <p>No products available yet. Browse categories or check back soon!</p>
+  </div>
+</section>
+
+<!-- FEATURES SECTION -->
+<section class="features-section">
+  <div class="feature-card">
+    <div class="feature-icon">🚚</div>
+    <h3>Fast Delivery</h3>
+    <p>Quick and reliable shipping</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">💎</div>
+    <h3>Premium Quality</h3>
+    <p>Handcrafted with care</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">🎯</div>
+    <h3>Perfect Gifts</h3>
+    <p>For every occasion</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">💬</div>
+    <h3>Customer Support</h3>
+    <p>Always here to help</p>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2025 Classy Gift Shop. All rights reserved. | Handmade gifts for your loved ones.</p>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/cart.js"></script>
+</body>
+</html>

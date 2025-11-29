@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - Classy Gift Shop</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="https://www.instagram.com/classy_gift_shop?igsh=ZHEyd2Vta3lhbmF5" target="_blank" rel="noopener noreferrer" class="logo-link">
+    <div class="logo">🎁 Classy Gift Shop</div>
+  </a>
+  <nav class="navbar">
+    <span id="userGreeting"></span>
+    <a href="home.html" class="nav-link">← Back to Home</a>
+    <button id="userLogoutBtn" class="btn-outline">Logout</button>
+  </nav>
+</header>
+
+<main class="profile-container">
+  <section class="glass-card profile-card">
+    <div class="profile-header">
+      <h1>My Profile</h1>
+      <p class="profile-subtitle">Update your account information</p>
+    </div>
+
+    <!-- Profile Form -->
+    <form id="profileForm" class="profile-form">
+      
+      <!-- Name Field -->
+      <div class="form-group">
+        <label for="profileName">Full Name</label>
+        <input type="text" id="profileName" placeholder="Your full name" required>
+      </div>
+
+      <!-- Email Field (Read-Only) -->
+      <div class="form-group">
+        <label for="profileEmail">Email Address</label>
+        <input type="email" id="profileEmail" placeholder="Email" readonly style="background-color: #f5f5f5; cursor: not-allowed; opacity: 0.8;">
+        <small class="form-hint">Email cannot be changed</small>
+      </div>
+
+      <!-- Phone Field -->
+      <div class="form-group">
+        <label for="profilePhone">Phone Number</label>
+        <input type="tel" id="profilePhone" placeholder="Your phone number" required>
+      </div>
+
+      <!-- Alternate Phone Field -->
+      <div class="form-group">
+        <label for="profileAltPhone">Alternate Phone (Optional)</label>
+        <input type="tel" id="profileAltPhone" placeholder="Alternate phone number">
+      </div>
+
+      <!-- Address Field -->
+      <div class="form-group">
+        <label for="profileAddress">Delivery Address</label>
+        <textarea id="profileAddress" placeholder="Your complete delivery address" required rows="3"></textarea>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="form-actions">
+        <button type="submit" class="btn-primary">💾 Save Changes</button>
+        <button type="button" class="btn-secondary" onclick="window.location.href='home.html'">Cancel</button>
+      </div>
+
+      <!-- Error/Success Messages -->
+      <p id="profileError" class="form-error" style="display:none;"></p>
+      <p id="profileSuccess" class="form-success" style="display:none;"></p>
+    </form>
+
+    <!-- Loading State -->
+    <div id="profileLoading" class="loading-spinner" style="display: none;">
+      <div class="spinner"></div>
+      <p>Loading your profile...</p>
+    </div>
+
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <a class="social-link" href="https://www.instagram.com/classy_gift_shop?igsh=ZHEyd2Vta3lhbmF5" target="_blank" rel="noopener noreferrer" aria-label="Classy Gift Shop Instagram">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.2" />
+        <path d="M12 7.5a4.5 4.5 0 100 9 4.5 4.5 0 000-9z" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" />
+      </svg>
+    </a>
+    <small class="copyright">© <span id="year"></span> Classy Gift Shop</small>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').innerText = new Date().getFullYear();
+</script>
+<script src="js/profile.js"></script>
+</body>
+</html>

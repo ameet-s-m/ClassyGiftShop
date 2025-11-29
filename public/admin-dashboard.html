@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard - Classy Gift Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="admin-body">
+
+<header class="admin-header glass-card">
+  <a href="https://www.instagram.com/classy_gift_shop?igsh=ZHEyd2Vta3lhbmF5" target="_blank" rel="noopener noreferrer" class="brand-link" style="text-decoration: none; color: inherit;">
+    <div>
+      <h1>Classy Gift Shop - Admin Dashboard</h1>
+      <p>Handmade Gifts for Your Loved Ones</p>
+    </div>
+  </a>
+  <div class="admin-right">
+    <span id="adminEmail"></span>
+    <button id="adminLogoutBtn" class="btn-outline">Logout</button>
+  </div>
+</header>
+
+<main class="admin-main">
+  <aside class="admin-sidebar glass-card">
+    <button class="admin-nav-item active" data-section="usersSection">Users</button>
+    <button class="admin-nav-item" data-section="categoriesSection">Categories</button>
+    <button class="admin-nav-item" data-section="productsSection">Products</button>
+  </aside>
+
+  <section class="admin-content glass-card">
+
+    <!-- USERS SECTION -->
+    <div id="usersSection">
+      <h2>Registered Users</h2>
+      
+      <!-- EDIT USER FORM -->
+      <form id="userForm" class="inline-form glass-card" style="display: none;">
+        <h3>Edit User Details</h3>
+        <input type="hidden" name="id" />
+        <label>Name</label>
+        <input type="text" name="name" required />
+        <label>Email</label>
+        <input type="email" name="email" required />
+        <label>Phone</label>
+        <input type="text" name="phone" required />
+        <label>Alternate Phone</label>
+        <input type="text" name="altPhone" required />
+        <label>Address</label>
+        <textarea name="address" required></textarea>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Update User</button>
+          <button type="button" class="btn-outline" id="cancelEditBtn">Cancel</button>
+        </div>
+      </form>
+      
+      <table id="usersTable" class="data-table">
+        <thead>
+        <tr>
+          <th>Name</th><th>Email</th><th>Phone</th><th>Alt Phone</th><th>Address</th><th>Actions</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- CATEGORIES SECTION -->
+    <div id="categoriesSection" class="hidden">
+      <h2>Categories</h2>
+
+      <form id="categoryForm" class="inline-form glass-card">
+        <input type="hidden" name="id" />
+        <input type="text" name="name" placeholder="Category Name" required />
+        <input type="text" name="description" placeholder="Description" />
+        <button type="submit" class="btn-primary">Save Category</button>
+      </form>
+
+      <table id="categoriesTable" class="data-table">
+        <thead>
+        <tr><th>Name</th><th>Description</th><th>Action</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- PRODUCTS SECTION -->
+    <div id="productsSection" class="hidden">
+      <h2>Products</h2>
+
+      <form id="productForm" class="product-form glass-card" enctype="multipart/form-data">
+
+        <input type="hidden" name="id" />
+
+        <label>Product Name</label>
+        <input type="text" name="name" required />
+
+        <label>Price (₹)</label>
+        <input type="number" name="price" required />
+
+        <label>Select Category</label>
+        <select name="category" id="productCategorySelect" required></select>
+
+        <label>Description</label>
+        <textarea name="description" placeholder="Enter Description"></textarea>
+
+        <label>Upload Product Images</label>
+        <input type="file" name="images" accept="image/*" multiple required />
+
+        <button type="submit" class="btn-primary">Add Product</button>
+      </form>
+
+      <p id="product-msg" style="color:green;font-weight:bold;margin-top:10px;"></p>
+
+      <table id="productsTable" class="data-table">
+        <thead>
+        <tr>
+          <th>Name</th><th>Category</th><th>Price</th><th>Images</th><th>Actions</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+  </section>
+</main>
+
+<script src="js/admin.js"></script>
+</body>
+</html>
