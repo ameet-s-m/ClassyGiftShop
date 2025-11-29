@@ -3,6 +3,13 @@ function getQueryId() {
   return params.get('id');
 }
 
+/* 🔥 NEW — Always return Cloudinary URL if available */
+function toUrl(path) {
+  return (path && path.startsWith('http'))
+    ? path
+    : "https://via.placeholder.com/400?text=No+Image";
+}
+
 async function loadProduct() {
   const id = getQueryId();
   if (!id) return (window.location.href = 'home.html');
@@ -12,10 +19,11 @@ async function loadProduct() {
     if(!res.ok) throw new Error("Product not found");
     const p = await res.json();
 
-    // Set breadcrumbs
+    // Breadcrumbs
     document.getElementById('breadcrumbCategory').innerText = p.category?.name || 'Category';
     document.getElementById('breadcrumbProduct').innerText = p.name;
 
+    // Product details
     document.getElementById('prodName').innerText = p.name;
     document.getElementById('prodPrice').innerText = '₹' + p.price;
     document.getElementById('prodCategory').innerText = p.category?.name || 'General';
@@ -23,205 +31,146 @@ async function loadProduct() {
 
     const mainImage = document.getElementById('mainImage');
     const thumbs = document.getElementById('thumbs');
-    const imgs = p.images && p.images.length ? p.images : ['https://via.placeholder.com/400'];
+    const imgs = (p.images?.length > 0) ? p.images.map(toUrl) : ['https://via.placeholder.com/400'];
 
-    function toUrl(path) {
-      if (!path) return path;
-      if (path.startsWith('http') || path.startsWith('//')) return path;
-      return path.startsWith('/') ? path : '/' + path;
-    }
+    // 🔥 MAIN IMAGE
+    mainImage.src = imgs[0];
+    mainImage.onerror = () => (mainImage.src = toUrl(null));
 
-    // Lightbox helper
-    function openLightbox(src) {
-      const overlay = document.createElement('div');
-      overlay.style.position = 'fixed';
-      overlay.style.top = 0;
-      overlay.style.left = 0;
-      overlay.style.width = '100%';
-      overlay.style.height = '100%';
-      overlay.style.background = 'rgba(0,0,0,0.85)';
-      overlay.style.display = 'flex';
-      overlay.style.alignItems = 'center';
-      overlay.style.justifyContent = 'center';
-      overlay.style.zIndex = 9999;
-      overlay.style.cursor = 'zoom-out';
-
-      const img = document.createElement('img');
-      img.src = toUrl(src);
-      img.style.maxWidth = '95%';
-      img.style.maxHeight = '95%';
-      img.style.objectFit = 'contain';
-      img.alt = 'Product Image (fullscreen)';
-
-      overlay.appendChild(img);
-      overlay.onclick = () => document.body.removeChild(overlay);
-      document.body.appendChild(overlay);
-
-      document.addEventListener('keydown', function escHandler(e) {
-        if (e.key === 'Escape') {
-          if (document.body.contains(overlay)) document.body.removeChild(overlay);
-          document.removeEventListener('keydown', escHandler);
-        }
-      });
-    }
-
-    mainImage.src = toUrl(imgs[0]);
-    mainImage.onerror = () => { mainImage.src = 'https://via.placeholder.com/400'; };
     mainImage.onclick = () => openLightbox(imgs[0]);
-    
+
+    // 🔥 THUMBNAILS
     thumbs.innerHTML = '';
     imgs.forEach((src, idx) => {
       const t = document.createElement('div');
       t.className = 'thumb-item' + (idx === 0 ? ' active' : '');
-      t.innerHTML = `<img src="${toUrl(src)}" alt="Product thumbnail ${idx + 1}" style="object-fit: contain;">`;
+      t.innerHTML = `<img src="${src}" alt="Thumb ${idx + 1}" style="object-fit:contain;">`;
       t.style.cursor = 'pointer';
-      
-      const img = t.querySelector('img');
-      img.onerror = () => { img.src = 'https://via.placeholder.com/80'; };
-      
+
       t.onclick = () => {
-        // Remove active class from all thumbs
         document.querySelectorAll('.thumb-item').forEach(th => th.classList.remove('active'));
-        // Add active class to clicked thumb
         t.classList.add('active');
-        // Update main image
-        mainImage.src = toUrl(src);
-        mainImage.onerror = () => { mainImage.src = 'https://via.placeholder.com/400'; };
+        mainImage.src = src;
       };
-      
-      t.addEventListener('dblclick', () => openLightbox(src));
+
+      // Double click → fullscreen lightbox
+      t.ondblclick = () => openLightbox(src);
+
       thumbs.appendChild(t);
     });
 
-    document.getElementById('btnAddToCart').onclick = async () => {
-      let cart = JSON.parse(localStorage.getItem("cart")||"[]");
-      const item = cart.find(i=>i._id===id);
-      
-      if(!item) {
-        const img = (p.images?.[0]) ? toUrl(p.images[0]) : 'https://via.placeholder.com/250?text=No+Image';
-        cart.push({ 
-          _id: id, 
+    // ADD TO CART
+    document.getElementById('btnAddToCart').onclick = () => {
+      let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const item = cart.find(i => i._id === id);
+
+      if (!item) {
+        cart.push({
+          _id: id,
           name: p.name,
-          price: p.price, 
-          category: p.category?.name || 'General', 
-          img: img, 
-          qty: 1 
+          price: p.price,
+          category: p.category?.name,
+          img: imgs[0],
+          qty: 1
         });
         localStorage.setItem("cart", JSON.stringify(cart));
-        showToast('✅ Added to cart!');
+        showToast("✅ Added to cart!");
       } else {
         window.location.href = 'cart.html';
       }
     };
 
-    document.getElementById('btnBuyNow').onclick = async () => {
-      let cart = JSON.parse(localStorage.getItem("cart")||"[]");
-      const item = cart.find(i=>i._id===id);
-      
-      if(!item) {
-        const img = (p.images?.[0]) ? toUrl(p.images[0]) : 'https://via.placeholder.com/250?text=No+Image';
-        cart.push({ 
-          _id: id, 
+    // BUY NOW
+    document.getElementById('btnBuyNow').onclick = () => {
+      let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      if (!cart.find(i => i._id === id)) {
+        cart.push({
+          _id: id,
           name: p.name,
-          price: p.price, 
-          category: p.category?.name || 'General', 
-          img: img, 
-          qty: 1 
+          price: p.price,
+          category: p.category?.name,
+          img: imgs[0],
+          qty: 1
         });
         localStorage.setItem("cart", JSON.stringify(cart));
       }
       window.location.href = 'cart.html';
     };
 
-    // Load related products (same category)
     loadRelatedProducts(p.category?._id, id);
 
   } catch(err) {
     console.error("Error loading product:", err);
-    document.querySelector('.product-detail').innerHTML = '<p style="text-align: center; padding: 3rem; color: #888;"><span style="font-size: 3rem; display: block; margin-bottom: 1rem;">❌</span> Product not found. <a href="home.html" style="color: var(--rose-primary); font-weight: 600;">Back to Home</a></p>';
+    document.querySelector('.product-detail').innerHTML =
+      `<p style="text-align:center;padding:3rem;color:#888">
+         <span style="font-size:3rem;display:block;margin-bottom:1rem">❌</span>
+         Product not found. 
+         <a href="home.html" style="color:#ff3b6d;font-weight:600">Back Home</a>
+       </p>`;
   }
 }
 
-async function loadRelatedProducts(categoryId, currentProductId) {
+/* 🔥 RELATED PRODUCTS — Cloudinary FIXED */
+async function loadRelatedProducts(categoryId, currentId) {
   if (!categoryId) return;
-
   try {
-    const res = await fetch(`/api/products?categoryId=${categoryId}`);
-    const products = await res.json();
-    
-    // Filter out current product and get max 4 related products
-    const related = products.filter(p => p._id !== currentProductId).slice(0, 4);
-    
+    const r = await fetch(`/api/products?categoryId=${categoryId}`);
+    const products = await r.json();
+    const related = products.filter(p => p._id !== currentId).slice(0, 4);
+    const grid = document.getElementById('relatedProducts');
+
     if (related.length === 0) {
-      document.getElementById('relatedProducts').innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #888;">No similar products found.</p>';
+      grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:2rem;color:#888">
+        No similar products.
+      </p>`;
       return;
     }
 
-    function toUrl(path) {
-      if (!path) return path;
-      if (path.startsWith('http') || path.startsWith('//')) return path;
-      return path.startsWith('/') ? path : '/' + path;
-    }
-
-    const grid = document.getElementById('relatedProducts');
     grid.innerHTML = '';
-
     related.forEach(p => {
-      const img = (p.images?.[0]) ? toUrl(p.images[0]) : 'https://via.placeholder.com/250?text=No+Image';
+      const img = toUrl(p.images?.[0]);
       const cart = JSON.parse(localStorage.getItem("cart")||"[]");
-      const exists = cart.some(i => i._id === p._id);
+      const exists = cart.some(i=>i._id===p._id);
 
-      const prodItem = document.createElement('div');
-      prodItem.className = 'product-item';
-      prodItem.innerHTML = `
-        <div class="product-image-wrapper">
-          <img src="${img}" alt="${p.name}" style="cursor: pointer;" onclick="goToProduct('${p._id}')">
-          <div class="product-overlay">
-            <button class="quick-view-btn" onclick="goToProduct('${p._id}')">Quick View</button>
+      grid.innerHTML += `
+        <div class="product-item">
+          <div class="product-image-wrapper">
+            <img src="${img}" alt="${p.name}" onclick="goToProduct('${p._id}')">
+            <div class="product-overlay">
+              <button class="quick-view-btn" onclick="goToProduct('${p._id}')">Quick View</button>
+            </div>
           </div>
-        </div>
-        <div class="product-info">
-          <h3>${p.name}</h3>
-          <p class="product-price">₹${p.price}</p>
-          <button onclick="toggleRelatedCart('${p._id}','${p.name}','${p.price}','${p.category?.name}','${img}')" 
-                  class="product-btn ${exists?'added':''}">
-            ${exists?'🛒 In Cart':'➕ Add to Cart'}
-          </button>
-        </div>
-      `;
-      grid.appendChild(prodItem);
+          <div class="product-info">
+            <h3>${p.name}</h3>
+            <p class="product-price">₹${p.price}</p>
+            <button onclick="toggleRelatedCart('${p._id}','${p.name}','${p.price}','${p.category?.name}','${img}')"
+                    class="product-btn ${exists?'added':''}">
+              ${exists?'🛒 In Cart':'➕ Add to Cart'}
+            </button>
+          </div>
+        </div>`;
     });
 
-  } catch(err) {
-    console.error("Error loading related products:", err);
-  }
+  } catch(err) { console.error(err); }
 }
 
-function goToProduct(id) {
-  window.location.href = `product.html?id=${id}`;
-}
+function goToProduct(id) { window.location.href=`product.html?id=${id}`; }
 
 function toggleRelatedCart(id,name,price,category,img){
   let cart = JSON.parse(localStorage.getItem("cart")||"[]");
-  const item = cart.find(i => i._id === id);
-
-  if(item) {
-    window.location.href = "cart.html";
-    return;
-  }
+  if(cart.find(i=>i._id===id)) return window.location.href="cart.html";
 
   cart.push({ _id:id, name, price, category, img, qty:1 });
   localStorage.setItem("cart", JSON.stringify(cart));
   showToast('✅ Added to cart!');
-  loadRelatedProducts(new URLSearchParams(window.location.search).get('categoryId'), id);
 }
 
-function showToast(msg) {
-  const toast = document.createElement('div');
-  toast.className = 'toast-notification';
-  toast.innerText = msg;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 2000);
+function showToast(msg){
+  const t=document.createElement('div');
+  t.className='toast-notification';
+  t.innerText=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),2000);
 }
 
 loadProduct();
