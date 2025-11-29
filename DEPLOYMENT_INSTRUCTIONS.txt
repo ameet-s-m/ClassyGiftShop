@@ -1,0 +1,141 @@
+# Classy Gift Shop - DEPLOYMENT GUIDE
+
+## Live Deployment Setup (GitHub + Railway + Render)
+
+### Step 1: Create GitHub Repository
+
+1. Go to [GitHub.com](https://github.com) and sign in
+2. Click **New Repository**
+3. Repository name: `classy-gift-shop`
+4. Description: `Premium e-commerce gift shop with admin dashboard`
+5. Select **Public**
+6. Click **Create Repository**
+
+### Step 2: Push Code to GitHub
+
+```bash
+cd d:\Projects\Classy_New
+
+# Add GitHub remote (replace YOUR_USERNAME)
+git remote add origin https://github.com/YOUR_USERNAME/classy-gift-shop.git
+
+# Rename branch to main if needed
+git branch -M main
+
+# Push to GitHub
+git push -u origin main
+```
+
+### Step 3: Set Up Railway Database
+
+1. Go to [Railway.com](https://railway.app)
+2. Sign up with GitHub account
+3. Create new project
+4. Select **MongoDB** from marketplace
+5. Wait for deployment
+6. Click on MongoDB service
+7. Go to **Variables** tab
+8. Copy the **DATABASE_URL** (looks like: mongodb+srv://...)
+9. Keep this URL safe for next steps
+
+### Step 4: Deploy to Render
+
+1. Go to [Render.com](https://render.com)
+2. Sign up with GitHub account
+3. Click **New +**
+4. Select **Web Service**
+5. Connect your GitHub repo (`classy-gift-shop`)
+6. Configure:
+   - **Name**: `classy-gift-shop`
+   - **Environment**: `Node`
+   - **Build Command**: `npm install`
+   - **Start Command**: `node server.js`
+   - **Region**: Choose closest to your location
+7. Click **Advanced** → Add Environment Variables:
+   ```
+   MONGO_URI = [paste your Railway DATABASE_URL here]
+   JWT_SECRET = supersecretjwtkey
+   NODE_ENV = production
+   WHATSAPP_BUSINESS_NUMBER = 919480191392
+   ```
+8. Click **Create Web Service**
+9. Wait for deployment (5-10 minutes)
+10. Your live URL will be: `https://classy-gift-shop.onrender.com`
+
+### Step 5: Configure Production Environment
+
+After deployment, verify:
+
+1. **Health Check**
+   - Visit: `https://your-render-url.onrender.com`
+   - You should see the login page
+
+2. **Database Connection**
+   - Try signing up
+   - Verify data is saved to Railway MongoDB
+
+3. **Test All Features**
+   - Sign up with test account
+   - Add products to cart
+   - Test WhatsApp message
+   - View digital bill
+   - Edit profile
+   - Admin login and user management
+
+### Step 6: Update Environment Variables (if needed)
+
+On Render dashboard:
+1. Go to your service
+2. Click **Environment**
+3. Update any variables
+4. Service auto-redeploys
+
+## Important Notes
+
+- **Free Tiers**: Render has free tier (600 free dyno hours/month), Railway free tier ($5/month)
+- **Cold Starts**: First request after inactivity may take 10-30 seconds
+- **Database**: Railway includes free MongoDB tier
+- **No Credit Card**: Both services offer free tier without payment
+
+## Troubleshooting
+
+### "Cannot find module" error
+```bash
+# Push fix to GitHub
+git add .
+git commit -m "Fix dependencies"
+git push origin main
+
+# Service auto-redeploys
+```
+
+### Database connection fails
+- Check MONGO_URI in Render environment variables
+- Verify IP whitelist in Railway (should be 0.0.0.0/0 for public access)
+
+### WhatsApp message not sending
+- Verify WHATSAPP_BUSINESS_NUMBER is correct in .env
+
+### Admin login not working
+- Default admin credentials are in database
+- Reset password via admin dashboard
+
+## Going Live Checklist
+
+- ✅ Code pushed to GitHub
+- ✅ Railway MongoDB deployed
+- ✅ Render app deployed
+- ✅ Environment variables configured
+- ✅ Database connected
+- ✅ All features tested
+- ✅ Live URL accessible
+
+## Your Live Website Links
+
+- **Main Shop**: `https://classy-gift-shop.onrender.com`
+- **Admin Panel**: `https://classy-gift-shop.onrender.com/admin-login.html`
+- **GitHub Repo**: `https://github.com/YOUR_USERNAME/classy-gift-shop`
+
+---
+
+**Status**: LIVE AND READY TO USE ✅
