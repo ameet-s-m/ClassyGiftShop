@@ -41,23 +41,29 @@ router.post('/', requireAdmin, async (req, res) => {
       return res.status(400).json({ message: 'Category does not exist' });
     }
 
-    // 3. Handle images
-    if (!req.files || !req.files.images) {
-      return res
-        .status(400)
-        .json({ message: 'Please upload at least one product image' });
-    }
+    // 3. Handle images using Cloudinary
+const cloudinary = require("cloudinary").v2;
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET
+});
 
-    let files = req.files.images;
-    const filesArr = Array.isArray(files) ? files : [files];
-    const images = [];
+if (!req.files || !req.files.images) {
+    return res.status(400).json({ message: 'Please upload at least one product image' });
+}
 
-    for (const file of filesArr) {
-      const fileName = Date.now() + '_' + file.name.replace(/\s+/g, '');
-      const uploadPath = path.join(__dirname, '..', 'uploads', fileName);
-      await file.mv(uploadPath);
-      images.push('/uploads/' + fileName); // public URL path
-    }
+let files = req.files.images;
+const filesArr = Array.isArray(files) ? files : [files];
+const images = [];
+
+for (const file of filesArr) {
+    const uploadResult = await cloudinary.uploader.upload(file.tempFilePath, {
+        folder: "products"
+    });
+    images.push(uploadResult.secure_url);
+}
+
 
     // 4. Save product
     const product = await Product.create({
